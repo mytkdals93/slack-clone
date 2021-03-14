@@ -4,25 +4,33 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import styled from "styled-components";
 import { Avatar } from '@material-ui/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 function Header() {
-
+    const [user] = useAuthState(auth);
+    console.log(user);
     return (
         <HeaderContainer>
             {/* Header Left */}
             <HeaderLeft>
                 <HeaderAvatar
                 //TODO: Add onclick
-                 src="https://picsum.photos/200/300"/>
-                 <AccessTimeIcon/>
+                 src={user?.photoURL}
+                alt={user?.displayName}
+                 />
+                 {/* <AccessTimeIcon/> */}
             </HeaderLeft>
             {/* Header Search */}
-            <HeaderSerach>
+            {/* <HeaderSerach>
                 <SearchIcon />
                 <input placeholder="Search..."/>
-            </HeaderSerach>
+            </HeaderSerach> */}
             {/* Header Right */}
             <HeaderRight>
-             <HelpOutlineIcon/>
+             <ExitToAppIcon onClick={()=>{
+                 auth.signOut();
+             }}/>
             </HeaderRight>
         </HeaderContainer>
     )
@@ -87,8 +95,9 @@ const HeaderRight = styled.div`
     flex:0.3;
     display:flex;
     align-items:center;
+    justify-content:flex-end;
     > .MuiSvgIcon-root {
+        cursor: pointer;
         margin-right: 20px;
-        margin-left:auto;
     }
 `;
